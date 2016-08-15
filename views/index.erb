@@ -1,1 +1,24 @@
-<h1>Home Page</h1>
+<h1>Welcome To The Casino</h1>
+
+<% if $casino.player %>
+  <h3> Welcome <%= $casino.player.name %> </h3>
+  <h4> 
+    You Have $<%= $casino.player.bankroll %> To Play With
+  </h4>
+  <hr />
+  <h2> Casino Menu</h2>
+  <ul>
+    <li>
+      <a href='/high_low'>Play High Low</a>
+    </li>
+    <li>
+      <a href='/atm'>ATM</a>
+    </li>
+  </ul>
+<% else %>
+  <h3> Create a new player</h3>
+  <form action='/create_player' method='POST'>
+    <input type='text' name='player_name' required placeholder='Player Name' />
+    <input type='number' name='player_bankroll' required placeholder='Bankroll' />
+    <input type='submit' />
+<% end %>

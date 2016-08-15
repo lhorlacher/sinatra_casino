@@ -1,0 +1,13 @@
+<h1>Welcome To High Low</h1>
+
+<h3>The Computer Picked: <%= $casino.game.computer_number %>
+</h3>
+
+<form method='POST' action='/high_low_bet'>
+  <input type='number' required name='bet_amount' placeholder='Bet Amount' />
+  <select name='choice'>
+    <option value='higher'>Higher</option>
+    <option value='lower'>Lower</option>
+  </select>
+  <input type='submit' />
+</form>

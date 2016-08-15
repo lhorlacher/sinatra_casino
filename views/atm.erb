@@ -1,0 +1,13 @@
+<h1>Casino ATM</h1>
+
+<h3>
+  Your current balance is: $<%= $casino.player.bankroll %>
+</h3>
+
+<h5>Add To Your Bankroll</h5>
+<form method='POST' action='/add_bankroll'>
+  <input type='number' required placeholder='Amount' name='amount' />
+  <input type='submit' />
+</form>
+
+<a href='/'>Back To Casino</a>

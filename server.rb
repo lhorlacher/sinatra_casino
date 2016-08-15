@@ -1,29 +1,64 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'sinatra'
 require 'pry'
-require 'lib/player.rb'
+require 'lib/casino.rb'
+
+$casino = Casino.new
 
 # root route
 get '/' do
-  @player = Player.new('garrett', 100) 
-	# form to create a new player
-	#@player - show a game menu
-	# that game menu is linked to each route
-	# game route eg. /high_low, /craps
 	erb :index
 end
 
-# GET the search form
-# get '/search' do	
-# end
+get '/atm' do
+  erb :atm
+end
 
-# POST search form
-# post '/search'
+get '/high_low' do
+  $casino.play_game('high_low')
+  erb :high_low
+end
 
-get '/craps' do
-  erb :craps
+gets '/craps' do
+    @game = Craps.new(@player)
+    Craps.start
+    erb :craps
 end
 
 get '/slots' do
+  $casino.play_game('slots')
   erb :slots
+end
+
+post '/create_player' do
+  $casino.new_player(params[:player_name], params[:player_bankroll])
+  redirect '/'
+end
+
+post '/add_bankroll' do
+  $casino.player.bankroll += params[:amount].to_f
+  redirect '/atm'
+end
+
+post '/high_low_bet' do
+  @result = $casino.game.compare(params[:bet_amount], params[:choice])
+  erb :high_low_result
+end
+
+post '/set_pass' do
+    @pass = params[:pass]
+    @pass_bet = params[:pass_bet].to_f
+    Craps.pass_bet_check
+    erb :craps
+end
+
+post '/set_odds' do
+    @odds = params[:odds].to_sym
+    @odds_bet = params[:odds_bet].to_f
+    Craps.odds_bet_check
+    erb :craps
+end
+
+post '/roll' do
+    Craps.roll
 end
