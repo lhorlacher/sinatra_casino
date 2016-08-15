@@ -1,18 +1,16 @@
 class Craps
-	attr_accessor :game_money, :name, :min, :@game_money
+	attr_accessor :pass, :pass_bet, :game_point, :odds, :odds_bet, :roll, :message
 	
 	def initialize(player)
 		@player = player
-		@game_money = 100
-		@name = "Craps"
-		@min = 10
 		
-		@pass = ""
-		@pass_bet = 0
-		@game_point = 0
-		
-		@odds = false
-		@odds_bet = 0
+		@pass = nil
+		@pass_bet = nil
+		@game_point = nil
+		@odds = nil
+		@odds_bet = nil
+		@roll = nil
+		@message = "Place your bet! Min is $10. Max is $#{'%.02f' % @player.wallet.total}."
 	end
 
 	def instructions
@@ -95,171 +93,113 @@ class Craps
 		puts "THE END\n"
 	end
 
-	def start
-		if @game_money.to_f >= @min.to_f
-			puts "\nChoose 'Pass' or 'Dont' or 'out' to Cash Out."
-			type = gets.strip.downcase
-			case type
-			when "dont", "don't"
-				@pass = "Don't Pass"
-				return pass_bet_fun
-			when "pass"
-				@pass = "Pass"
-				return pass_bet_fun
-			when "out", "cash"
-				return cash_out
-			when "help"
-				help
-				start
-			end
-		else 
-			puts "Sorry! You don't have enough money to place a bet!"
-			puts "Press enter to cash out."
-			gets
-			return cash_out
-		end
-		puts "What was that?"
-		start
+	def reset_var
+		@pass = nil
+		@pass_bet = nil
+		@game_point = nil
+		@odds = nil
+		@odds_bet = nil
+		@roll = nil
 	end
 
-	def pass_bet_fun
-		puts "\nEnter the amount for your #{@pass} bet. Or type 'back'."
-		puts "Min is $10. Max is $#{'%.02f' % @game_money.to_f}."
-		while true
-		bet = gets.strip
-			if bet == 'back'
-				return start
-			elsif bet =~ /^\$?\d*\.?\d+$/ && bet.to_f <= @game_money.to_f && bet.to_f >= @min
-				@pass_bet = bet.to_f
-				puts "\nYou bet $#{'%.02f' % @pass_bet}."
-				return come_out_roll
-			else
-				puts "Please enter a value between the min and max."
-			end
+	def pass_bet_check
+		if @pass_bet >= @player.wallet.total.to_f
+			reset_var
+			@message = "Enter a valid bet! Min is $10. Max is $#{'%.02f' % @player.wallet.total}."
+		else
+			@message = "Bet placed! Roll!"
+			@player.wallet.total = @player.wallet.total - @pass_bet
+		end
+	end
+
+	def roll
+		if @roll == nil
+			@roll = 2 + rand(6) + rand(6)
+			come_out_roll
+		elsif @roll
+			@roll = 2 + rand(6) + rand(6)
+			point_rolls
 		end
 	end
 
 	def come_out_roll
-		puts "\nPress enter to roll or type 'back' to restart."
-		input = gets
-		if input.strip == "back"
-			@pass_bet = 0
-			return start
-		end
-		@game_money = @game_money.to_f - @pass_bet.to_f
-		co = 2 + rand(6) + rand(6)
-		puts "Come out roll is...#{co}!"
 		if @pass == "Don't Pass"
-			case co
+			case @roll
 			when 2, 3
-				@game_money.to_f += @pass_bet * 2
-				puts "\nYou won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
-				puts "You now have $#{'%.02f' % @game_money}."
-				return start
+				@player.wallet.total.to_f += @pass_bet * 2
+				@message = "Come out roll is...#{@roll}! You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
+				reset_var
 			when 7, 11
-				puts "\nYour #{@pass} bet lost $#{'%.02f' % @pass_bet}."
-				puts "You now have $#{'%.02f' % @game_money}."
-				return start
+				@message = "Come out roll is...#{@roll}! Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
+				reset_var
 			when 4, 10, 5, 9, 6, 8
-				@game_point = co
-				puts "\nThe game point is now #{@game_point.to_i}."
-				return point_rolls
+				@game_point = @roll
+				@message = "Come out roll is...#{@roll}! The game point is now #{@game_point.to_i}. Roll again!"
 			else
-				@game_money += @pass_bet
-				puts "\nA tie! Nobody wins or loses anything."
-				puts "You have $#{'%.02f' % @game_money}."
-				return start
+				@player.wallet.total += @pass_bet
+				@message = "Come out roll is...#{@roll}! A tie! Nobody wins or loses anything."
+				reset_var
 			end
 		elsif @pass == "Pass"
 			case co
 			when 7, 11
-				@game_money += @pass_bet * 2
-				puts "\nYou won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
-				puts "You now have $#{'%.02f' % @game_money}."
-				return start
+				@player.wallet.total += @pass_bet * 2
+				@message = "Come out roll is...#{@roll}! You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
+				reset_var
 			when 2, 3, 12
-				puts "\nYour #{@pass} bet lost $#{'%.02f' % @pass_bet}."
-				puts "You now have $#{'%.02f' % @game_money}."
-				return start
+				@message = "Come out roll is...#{@roll}! Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
+				reset_var
 			when 4, 10, 5, 9, 6, 8
-				@game_point = co
-				puts "\nThe game point is now #{@game_point.to_i}."
-				return point_rolls
+				@game_point = @roll
+				@message = "Come out roll is...#{@roll}! The game point is now #{@game_point.to_i}. Roll again!"
 			else
-				@game_money += @pass_bet
-				puts "\nA tie! Nobody wins or loses anything."
-				puts "You have $#{'%.02f' % @game_money}."
-				return start
+				@player.wallet.total += @pass_bet
+				@message = "Come out roll is...#{@roll}! A tie! Nobody wins or loses anything."
+				reset_var
 			end
 		end
 	end
 
 	def point_rolls
-		print "\nPress enter to roll." 
-		puts " Type 'odds' to place an Odds bet." if @game_money >= @pass_bet && @odds == false
-		input = gets
-		if input.strip.downcase == "odds" && @game_money.to_f >= @pass_bet && @odds == false
-			odds_fun
-		elsif input.strip.downcase == "odds"
-			puts "Whoops! You don't have enough money to place an odds bet."
-			point_rolls
-		end
-		pr = 2 + rand(6) + rand(6)
 		puts "The roll is...#{pr}!"
-		if pr != @game_point && pr != 7
-			point_rolls
+		if @roll != @game_point && @roll != 7
+			@message = "Nothing yet! Roll again!"
 		elsif @pass == "Don't Pass" && pr == 7
-			@game_money += @pass_bet * 2
-			puts "You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
+			@player.wallet.total += @pass_bet * 2
+			@message = "You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
 			odds_win
-			puts "You now have $#{@game_money}."
-			start
+			reset_var
 		elsif @pass == "Don't Pass" && pr == @game_point
 			puts "Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
 			odds_loss
-			puts "You now have $#{@game_money}."
-			start
+			reset_var
 		elsif @pass == "Pass" && pr == @game_point
-			@game_money += @pass_bet * 2
+			@player.wallet.total += @pass_bet * 2
 			puts "You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
 			odds_win
-			puts "You now have $#{@game_money}."
-			start
+			reset_var
 		elsif @pass == "Pass" && pr == 7
 			puts "Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
 			odds_loss
-			puts "You now have $#{@game_money}."
-			start
+			reset_var
 		else
 			puts "This is impossible!"
 		end
 	end
 
-	def odds_fun
-		puts "\nType in your Odds bet or type 'back' to cancel."
-		bettable = @game_money.to_f <= (2 * @pass_bet) ? @game_money.to_f : (2 * @pass_bet)
-		puts "You may bet between $#{'%.02f' % @pass_bet} and $#{'%.02f' % bettable}.\n"
-		while true
-			bet = gets.strip
-			if bet == 'back'
-				return point_rolls
-			elsif bet =~ /^\$?\d*\.?\d+$/ && bet.to_i >= @pass_bet && bet.to_i <= bettable.to_i
-				@odds_bet = bet.to_f
-				@game_money -= @odds_bet
-				puts "\nYour Odds bet is $#{'%.02f' % @odds_bet}."
-				@odds = true
-				puts "Press enter to roll."
-				gets
-				return
-			else
-				puts "Please enter a value between $#{'%.02f' % @pass_bet} and $#{'%.02f' % bettable}."
-			end
+	def odds_bet_check
+		if @odds_bet >= @player.wallet.total.to_f
+			@odds = nil
+			@odds_bet = nil
+			@message = "Enter a valid bet! Min is $10. Max is $#{'%.02f' % @player.wallet.total}."
+		else
+			@message = "Odds bet placed! Roll!"
+			@player.wallet.total = @player.wallet.total - @pass_bet
 		end
 	end
 
 	def odds_win
 		if @odds == true
-			puts "You also won your Odds bet!"
 		else
 			return
 		end
@@ -289,39 +229,35 @@ class Craps
 	end
 
 	def odds_win_result(mult)
-		@game_money += (@odds_bet * mult)
-		puts "You won $#{'%.02f' % (@odds_bet * mult)}!"
-		@odds = false
-		@odds_bet = 0
+		winnings = @odds_bet * mult
+		@player.wallet.total += winnings
+		@message = @message + "And your Odds bet won $#{'%.02f' % winnings}!"
 	end
 
 
 
 	def odds_loss
 		if @odds == true
-			puts "You also lost your Odds bet..."
-			puts "Your Odds bet lost $#{'%.02f' % @odds_bet}."
-			@odds = false
-			@odds_bet = 0
-		else
-			return
+			@message = @message + "Your Odds bet lost $#{'%.02f' % @odds_bet}."
 		end
 	end
 
-	def cash_out
-		puts "Are you sure you want to cash out? y/n?"
-		input = gets.strip.downcase
-		case input
-		when "y"
-			return @game_money.to_f
-		when "n"
-			puts "Good man! Let's keep playing!"
-			return start
-		else
-			cash_out
-		end
+end
+
+class Player
+	attr_accessor :name, :wallet
+
+	def initialize
+		@name = "Lonnie"
+		@wallet = Wallet.new
 	end
 end
 
+class Wallet
+	attr_accessor :total
 
+	def initialize
+		@total = 300
+	end
+end
 
