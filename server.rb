@@ -2,6 +2,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'sinatra'
 require 'pry'
 require 'lib/casino.rb'
+require 'lib/slots'
 
 $casino = Casino.new
 
@@ -19,15 +20,19 @@ get '/high_low' do
   erb :high_low
 end
 
+get '/slots' do
+    @slots = [url('/images/pearl.jpeg'), url('/images/SandDollar.jpg'), url('/images/StarFish.jpg')]
+  @slot_1 = @slots.sample
+  @slot_2 = @slots.sample
+  @slot_3 = @slots.sample
+    @result = Slots.results(@slot_1, @slot_2, @slot_3)
+    erb :slots
+end
+
 gets '/craps' do
     @game = Craps.new(@player)
     Craps.start
     erb :craps
-end
-
-get '/slots' do
-  $casino.play_game('slots')
-  erb :slots
 end
 
 post '/create_player' do
@@ -44,6 +49,7 @@ post '/high_low_bet' do
   @result = $casino.game.compare(params[:bet_amount], params[:choice])
   erb :high_low_result
 end
+
 
 post '/set_pass' do
     @pass = params[:pass]
