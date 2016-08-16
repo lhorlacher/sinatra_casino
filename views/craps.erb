@@ -23,15 +23,15 @@
 </section>
 <div class='section_label'><h2>Dealer</h2></div>
 <section id='dealer' class='section_craps'>
-	<h3> Dealer: "<%= $casino.game.message %>" </h3>
+	<h2> Dealer: "<%= $casino.game.message %>" </h2>
 </section>
 
 <section id='pass' class='section_craps'>
 <div class='section_label'><h2>Pass Bet</h2></div>
 	<% if $casino.game.pass && $casino.game.pass_bet %>
 		<div id='status_pass_bet'>
-			<h2> Bet type: <%= $casino.game.pass %>
-			<h2> Bet amount: $<%= $casino.game.pass_bet %> </h2>
+			<h2> Bet type: <%= $casino.game.pass %> |
+			Bet amount: $<%= $casino.game.pass_bet %> </h2>
 		</div>
 	<% else %>
 		<div id='place_pass_bet'>
@@ -53,14 +53,13 @@
 	<div class='section_label'><h2>Odds Bet</h2></div>
 	<% if $casino.game.odds && $casino.game.odds_bet && $casino.game.game_point %>
 		<div>
-			<h2>Odds bet amount: <%= $casino.game.odds_bet %> </h2>
+			<h2>Odds bet amount: $<%= $casino.game.odds_bet %> </h2>
 		</div>
 	<% elsif $casino.game.game_point %>
 		<div id='place_pass_bet'>
 			<form method="POST" action="/set_odds" required>
 				<label for='odds'> Place an odds bet?</label> <br>
-				<input type="radio" name="odds" value="true" id='odds'> Yes
-				<input type="radio" name="odds" value="nil" id='odds'> No
+				<input type="radio" name="odds" value="true" id='odds' required> Yes
 				<br>
 				<label for='odds_bet_amount'>Bet amount?</label>
 				<br>
