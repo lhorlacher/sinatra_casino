@@ -17,13 +17,6 @@ hr	{
 	height: 4px;
 }
 
-section:after {
-	content: "";
-	display: block;
-	clear: both;
-	margin-bottom: 40px;
-}
-
 div {
 	float: left;
 }
@@ -37,16 +30,27 @@ footer {
     width: 100%;
 }
 
-#dice {
-	height: 75px;
+.section_craps {
+	height: 20vh;
+	position: relative;
+}
+
+.section_label {
+	transform: rotate(270deg);
+	font-size: 15px;
+	width: 15vh;
+	background-color: black;
+	color:	white;
 	text-align: center;
-	background-color: white;
+}
+
+#dice {
+	text-align: center;
 	border-top: 4px solid orange;
 }
 
 #roll_button_div {
 	width: 30vw;
-	margin: auto;
 }
 
 #roll_button {

@@ -1,7 +1,8 @@
 <h1>Craps</h1>
 <a href="/">Return to Menu</a>
 
-<section id='dice'>
+<section id='dice' class='section_craps'>
+<div class='section_label'><h2>Dice</h2></div>
 	<div id='roll_button_div'>
 		<% if $casino.game.pass_bet %>
 			<form method='POST' action='/roll' required>
@@ -19,13 +20,13 @@
 	</div>
 
 </section>
-
-<section id='dealer'>
+<div class='section_label'><h2>Dealer</h2></div>
+<section id='dealer' class='section_craps'>
 	<h3> Dealer: "<%= $casino.game.message %>" </h3>
+</section>
 
-</section id=''>
-
-<section id='pass'>
+<section id='pass' class='section_craps'>
+<div class='section_label'><h2>Pass Bet</h2></div>
 	<% if $casino.game.pass && $casino.game.pass_bet %>
 		<div id='status_pass_bet'>
 			<h2> Bet type: <%= $casino.game.pass %>
@@ -45,10 +46,10 @@
 			</form>
 		</div>
 	<% end %>
-	
 </section>
 
-<section id='Odds Bet'>
+<section id='Odds Bet' class='section_craps'>
+	<div class='section_label'><h2>Odds Bet</h2></div>
 	<% if $casino.game.odds && $casino.game.odds_bet && $casino.game.game_point %>
 		<div>
 			<h2>Odds bet amount: <%= $casino.game.odds_bet %> </h2>
