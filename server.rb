@@ -68,4 +68,3 @@ post '/roll' do
   $casino.game.roll1
   erb :craps
 end
-

@@ -1,2 +1,16 @@
-<h1>Slots game</h1>
+<h1>Slots!</h1>
 
+<% if @result %>
+  <% if @result == 'jackpot' %>
+    <h1>JACKPOT</h1>
+  <% elsif @result == 'win' %>
+    <h1>WINNER</h1>
+  <% elsif @result == 'lose' %>
+    <h1>You Lost, Sucker</h1>
+  <% end %>
+<% end %>
+<img src="<%= @slot_1%>" class='slots' />
+<img src="<%= @slot_2%>" class='slots' />
+<img src="<%= @slot_3%>" class='slots' />
+<br/>
+<a href='/slots'><button>PULL</button></a>
