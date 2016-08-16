@@ -1,5 +1,7 @@
+
+
 class Craps
-	attr_accessor :pass, :pass_bet, :game_point, :odds, :odds_bet, :roll, :message
+	attr_accessor :pass, :pass_bet, :game_point, :odds, :odds_bet, :roll, :message, :player
 	
 	def initialize(player)
 		@player = player
@@ -102,16 +104,16 @@ class Craps
 	end
 
 	def pass_bet_check
-		if @pass_bet >= @player.bankroll.to_f
+		if @pass_bet.to_i >= @player.bankroll.to_i
 			reset_var
 			@message = "Enter a valid bet! Min is $10. Max is $#{'%.02f' % @player.bankroll}."
 		else
 			@message = "Bet placed! Roll!"
-			@player.bankroll = @player.bankroll - @pass_bet
+			@player.bankroll = @player.bankroll.to_i - @pass_bet.to_i
 		end
 	end
 
-	def roll
+	def roll1
 		if @roll == nil
 			@roll = 2 + rand(6) + rand(6)
 			come_out_roll
@@ -140,7 +142,7 @@ class Craps
 				reset_var
 			end
 		elsif @pass == "Pass"
-			case co
+			case @roll
 			when 7, 11
 				@player.bankroll += @pass_bet * 2
 				@message = "Come out roll is...#{@roll}! You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
@@ -160,25 +162,25 @@ class Craps
 	end
 
 	def point_rolls
-		puts "The roll is...#{pr}!"
+		puts "The roll is...#{@roll}!"
 		if @roll != @game_point && @roll != 7
 			@message = "Nothing yet! Roll again!"
-		elsif @pass == "Don't Pass" && pr == 7
+		elsif @pass == "Don't Pass" && @roll == 7
 			@player.bankroll += @pass_bet * 2
 			@message = "You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
 			odds_win
 			reset_var
-		elsif @pass == "Don't Pass" && pr == @game_point
-			puts "Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
+		elsif @pass == "Don't Pass" && @roll == @game_point
+			@message = "Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
 			odds_loss
 			reset_var
-		elsif @pass == "Pass" && pr == @game_point
+		elsif @pass == "Pass" && @roll == @game_point
 			@player.bankroll += @pass_bet * 2
-			puts "You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
+			@message = "You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
 			odds_win
 			reset_var
-		elsif @pass == "Pass" && pr == 7
-			puts "Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
+		elsif @pass == "Pass" && @roll == 7
+			@message = "Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
 			odds_loss
 			reset_var
 		else

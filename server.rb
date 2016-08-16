@@ -50,21 +50,22 @@ post '/high_low_bet' do
   erb :high_low_result
 end
 
-
 post '/set_pass' do
-    @pass = params[:pass]
-    @pass_bet = params[:pass_bet].to_f
-    Craps.pass_bet_check
-    erb :craps
+  $casino.game.pass = params[:pass]
+  $casino.game.pass_bet = params[:pass_bet].to_i
+  $casino.game.pass_bet_check
+  erb :craps
 end
 
 post '/set_odds' do
-    @odds = params[:odds].to_sym
-    @odds_bet = params[:odds_bet].to_f
-    Craps.odds_bet_check
-    erb :craps
+  $casino.game.odds = params[:odds].to_sym
+  $casino.game.odds_bet = params[:odds_bet].to_i
+  $casino.game.odds_bet_check
+  erb :craps
 end
 
 post '/roll' do
-    Craps.roll
+  $casino.game.roll1
+  erb :craps
 end
+

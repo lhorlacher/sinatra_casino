@@ -1,57 +1,55 @@
 <h1>Craps</h1>
 
 <section id='dice'>
-	<% if @pass %>
+	<% if $casino.game.pass_bet %>
 		<form method='POST' action='/roll' required>
 			<button>ROLL!</button>
 		</form>
-		<h2>Last Roll: <%= @roll %> </h2>
-		<h2>Point Roll: <%= @game_point %> </h2>
-	<% elsif @pass && @roll %>
-		<h2>Last Roll: <%= roll %> </h2>
+	<% end %>
+	<% if $casino.game.roll %>
+		<h2>Last Roll: <%= $casino.game.roll %> </h2>
+	<% end %>
+	<% if $casino.game.game_point %>
+		<h2>Point: <%= $casino.game.game_point %> </h2>
 	<% end %>
 
 </section>
 
 <section id='results'>
-	<h2>Player Message</h2>
-	<h4> <%= @message %> </h4>
+	<h2>Dealer Message</h2>
+	<h4> <%= $casino.game.message %> </h4>
 
 </section>
 
 <section id='pass'>
 
-
 	<div id='status_pass_bet'>
-	<% if @pass && @pass_bet %>
-		<h2> Bet type: <%= @pass %> </h2>
-		<h2> Bet amount: <%= @pass_bet %> </h2>
+	<% if $casino.game.pass && $casino.game.pass_bet %>
+		<h2> Bet type: <%= $casino.game.pass %> </h2>
+		<h2> Bet amount: <%= $casino.game.pass_bet %> </h2>
 	<% else %>
 		<div id='place_pass_bet'>
-			<form method="POST" action="/set_pass" required>
+			<form method="POST" action="/set_pass">
 				<label for='bet_type'>Choose your bet type</label> 
 				<br>
-				<input type="radio" name="pass" value="Pass" id='bet_type'> Place "Pass" Bet <br>
-				<input type="radio" name="pass" value="Don't Pass" id='bet_type'> Place "Don't Pass" Bet <br>
+				<input type="radio" name="pass" value="Pass" id='bet_type' required> Place "Pass" Bet <br>
+				<input type="radio" name="pass" value="Don't Pass" id='bet_type' required> Place "Don't Pass" Bet <br>
 				<label for='pass_bet_amount'>Bet amount?</label>
 				<br>
-				<input type="number" name="pass_bet" id='pass_bet_amount' min='10'>
-				<button type='submit'>Place Bet</button>
+				<input type="number" name="pass_bet" id='pass_bet_amount' min='10' required>
+				<input type='submit'>Place Bet</input>
 			</form>
 		</div>
 	<% end %>
 	</div>
 </section>
 
-
-
-
 <section id='Odds Bet'>
-	<% if @odds && @odds_bet && @game_point%>
+	<% if $casino.game.odds && $casino.game.odds_bet && $casino.game.game_point %>
 		<div>
-			<h2>Odds bet amount: <%= @odds_bet %> </h2>
+			<h2>Odds bet amount: <%= $casino.game.odds_bet %> </h2>
 		</div>
-	<% elsif @game_point %>
+	<% elsif $casino.game.game_point %>
 		<div id='place_pass_bet'>
 			<form method="POST" action="/set_odds" required>
 				<label for='odds'> Place an odds bet?</label> <br>
@@ -61,7 +59,7 @@
 				<label for='odds_bet_amount'>Bet amount?</label>
 				<br>
 				<input type="number" name="odds_bet" id='odds_bet_amount' min='10'>
-				<button type='submit'>Place Bet</button>
+				<input type='submit'>Place Bet</input>
 			</form>
 		</div id='status_pass_bet'>
 	<% end %>
