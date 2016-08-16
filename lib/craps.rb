@@ -3,14 +3,13 @@ class Craps
 	
 	def initialize(player)
 		@player = player
-		
 		@pass = nil
 		@pass_bet = nil
 		@game_point = nil
 		@odds = nil
 		@odds_bet = nil
 		@roll = nil
-		@message = "Place your bet! Min is $10. Max is $#{'%.02f' % @player.wallet.total}."
+		@message = "Place your bet! Min is $10. Max is $#{'%.02f' % @player.bankroll}."
 	end
 
 	def instructions
@@ -103,12 +102,12 @@ class Craps
 	end
 
 	def pass_bet_check
-		if @pass_bet >= @player.wallet.total.to_f
+		if @pass_bet >= @player.bankroll.to_f
 			reset_var
-			@message = "Enter a valid bet! Min is $10. Max is $#{'%.02f' % @player.wallet.total}."
+			@message = "Enter a valid bet! Min is $10. Max is $#{'%.02f' % @player.bankroll}."
 		else
 			@message = "Bet placed! Roll!"
-			@player.wallet.total = @player.wallet.total - @pass_bet
+			@player.bankroll = @player.bankroll - @pass_bet
 		end
 	end
 
@@ -126,7 +125,7 @@ class Craps
 		if @pass == "Don't Pass"
 			case @roll
 			when 2, 3
-				@player.wallet.total.to_f += @pass_bet * 2
+				@player.bankroll.to_f += @pass_bet * 2
 				@message = "Come out roll is...#{@roll}! You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
 				reset_var
 			when 7, 11
@@ -136,14 +135,14 @@ class Craps
 				@game_point = @roll
 				@message = "Come out roll is...#{@roll}! The game point is now #{@game_point.to_i}. Roll again!"
 			else
-				@player.wallet.total += @pass_bet
+				@player.bankroll += @pass_bet
 				@message = "Come out roll is...#{@roll}! A tie! Nobody wins or loses anything."
 				reset_var
 			end
 		elsif @pass == "Pass"
 			case co
 			when 7, 11
-				@player.wallet.total += @pass_bet * 2
+				@player.bankroll += @pass_bet * 2
 				@message = "Come out roll is...#{@roll}! You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
 				reset_var
 			when 2, 3, 12
@@ -153,7 +152,7 @@ class Craps
 				@game_point = @roll
 				@message = "Come out roll is...#{@roll}! The game point is now #{@game_point.to_i}. Roll again!"
 			else
-				@player.wallet.total += @pass_bet
+				@player.bankroll += @pass_bet
 				@message = "Come out roll is...#{@roll}! A tie! Nobody wins or loses anything."
 				reset_var
 			end
@@ -165,7 +164,7 @@ class Craps
 		if @roll != @game_point && @roll != 7
 			@message = "Nothing yet! Roll again!"
 		elsif @pass == "Don't Pass" && pr == 7
-			@player.wallet.total += @pass_bet * 2
+			@player.bankroll += @pass_bet * 2
 			@message = "You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
 			odds_win
 			reset_var
@@ -174,7 +173,7 @@ class Craps
 			odds_loss
 			reset_var
 		elsif @pass == "Pass" && pr == @game_point
-			@player.wallet.total += @pass_bet * 2
+			@player.bankroll += @pass_bet * 2
 			puts "You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
 			odds_win
 			reset_var
@@ -188,13 +187,13 @@ class Craps
 	end
 
 	def odds_bet_check
-		if @odds_bet >= @player.wallet.total.to_f
+		if @odds_bet >= @player.bankroll.to_f
 			@odds = nil
 			@odds_bet = nil
-			@message = "Enter a valid bet! Min is $10. Max is $#{'%.02f' % @player.wallet.total}."
+			@message = "Enter a valid bet! Min is $10. Max is $#{'%.02f' % @player.bankroll}."
 		else
 			@message = "Odds bet placed! Roll!"
-			@player.wallet.total = @player.wallet.total - @pass_bet
+			@player.bankroll = @player.bankroll - @pass_bet
 		end
 	end
 
@@ -230,7 +229,7 @@ class Craps
 
 	def odds_win_result(mult)
 		winnings = @odds_bet * mult
-		@player.wallet.total += winnings
+		@player.bankroll += winnings
 		@message = @message + "And your Odds bet won $#{'%.02f' % winnings}!"
 	end
 
@@ -242,22 +241,5 @@ class Craps
 		end
 	end
 
-end
-
-class Player
-	attr_accessor :name, :wallet
-
-	def initialize
-		@name = "Lonnie"
-		@wallet = Wallet.new
-	end
-end
-
-class Wallet
-	attr_accessor :total
-
-	def initialize
-		@total = 300
-	end
 end
 

@@ -1,5 +1,6 @@
 require_relative 'player'
 require_relative 'high_low'
+require_relative 'craps'
 
 class Casino
   attr_accessor :player, :game
@@ -17,6 +18,8 @@ class Casino
     case game
       when 'high_low'
         @game = HighLow.new(@player)
+      when 'craps'
+        @game = Craps.new(@player)
     end
   end
 end
