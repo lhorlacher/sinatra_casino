@@ -32,7 +32,6 @@ footer {
 
 .section_craps {
 	height: 20vh;
-	position: relative;
 }
 
 .section_label {
@@ -40,7 +39,7 @@ footer {
 	font-size: 15px;
 	width: 15vh;
 	background-color: black;
-	color:	white;
+	color: white;
 	text-align: center;
 }
 
@@ -62,7 +61,7 @@ footer {
 }
 
 #previous_rolls {
-	width: 60vw;
+	width: 40vw;
 	margin: auto;
 }
 
