@@ -162,25 +162,25 @@ class Craps
 	end
 
 	def point_rolls
-		puts "The roll is...#{@roll}!"
+		puts "Point roll is...#{@roll}!"
 		if @roll != @game_point && @roll != 7
-			@message = "Nothing yet! Roll again!"
+			@message = "Point roll is...#{@roll}! Nothing yet! Roll again!"
 		elsif @pass == "Don't Pass" && @roll == 7
 			@player.bankroll += @pass_bet * 2
-			@message = "You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
+			@message = "Point roll is...#{@roll}! You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
 			odds_win
 			reset_var
 		elsif @pass == "Don't Pass" && @roll == @game_point
-			@message = "Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
+			@message = "Point roll is...#{@roll}! Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
 			odds_loss
 			reset_var
 		elsif @pass == "Pass" && @roll == @game_point
 			@player.bankroll += @pass_bet * 2
-			@message = "You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
+			@message = "Point roll is...#{@roll}! You won! Your #{@pass} bet of $#{'%.02f' % @pass_bet} returned $#{'%.02f' % (@pass_bet * 2)}."
 			odds_win
 			reset_var
 		elsif @pass == "Pass" && @roll == 7
-			@message = "Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
+			@message = "Point roll is...#{@roll}! Your #{@pass} bet lost $#{'%.02f' % @pass_bet}."
 			odds_loss
 			reset_var
 		else
@@ -195,7 +195,8 @@ class Craps
 			@message = "Enter a valid bet! Min is $10. Max is $#{'%.02f' % @player.bankroll}."
 		else
 			@message = "Odds bet placed! Roll!"
-			@player.bankroll = @player.bankroll - @pass_bet
+			@player.bankroll = @player.bankroll - @odds_bet
+			@odds = true
 		end
 	end
 
@@ -232,14 +233,14 @@ class Craps
 	def odds_win_result(mult)
 		winnings = @odds_bet * mult
 		@player.bankroll += winnings
-		@message = @message + "And your Odds bet won $#{'%.02f' % winnings}!"
+		@message = "#{@message} And your Odds bet won $#{'%.02f' % winnings}!"
 	end
 
 
 
 	def odds_loss
 		if @odds == true
-			@message = @message + "Your Odds bet lost $#{'%.02f' % @odds_bet}."
+			@message = "#{@message} Your Odds bet lost $#{'%.02f' % @odds_bet}."
 		end
 	end
 

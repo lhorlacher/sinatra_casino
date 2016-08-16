@@ -1,0 +1,67 @@
+body	{
+	background-color: beige;
+	background-repeat: no-repeat;
+	background-size: 150vh;
+	background-opacity: .1;
+	font-family: Optima,Segoe,"Segoe UI",Candara,Calibri,Arial,sans-serif
+}
+
+h1	{
+	color: orange;
+	font-family: Futura,"Trebuchet MS",Arial,sans-serif;
+}
+
+hr	{
+	outline: none;
+	background-color: orange;
+	height: 4px;
+}
+
+section:after {
+	content: "";
+	display: block;
+	clear: both;
+	margin-bottom: 40px;
+}
+
+div {
+	float: left;
+}
+
+footer {
+	background-color: white;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+}
+
+#dice {
+	height: 75px;
+	text-align: center;
+	background-color: white;
+	border-top: 4px solid orange;
+}
+
+#roll_button_div {
+	width: 30vw;
+	margin: auto;
+}
+
+#roll_button {
+	background-color: black;
+	color: gold;
+	height: 60px;
+	width: 150px;
+	font-size: 40px;
+}
+
+#previous_rolls {
+	width: 60vw;
+	margin: auto;
+}
+
+#dealer {
+	background-color: ;
+}

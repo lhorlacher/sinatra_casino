@@ -1,32 +1,36 @@
 <h1>Craps</h1>
+<a href="/">Return to Menu</a>
 
 <section id='dice'>
-	<% if $casino.game.pass_bet %>
-		<form method='POST' action='/roll' required>
-			<button>ROLL!</button>
-		</form>
-	<% end %>
-	<% if $casino.game.roll %>
-		<h2>Last Roll: <%= $casino.game.roll %> </h2>
-	<% end %>
-	<% if $casino.game.game_point %>
-		<h2>Point: <%= $casino.game.game_point %> </h2>
-	<% end %>
+	<div id='roll_button_div'>
+		<% if $casino.game.pass_bet %>
+			<form method='POST' action='/roll' required>
+				<button id='roll_button'>ROLL!</button>
+			</form>
+		<% end %>
+	</div>
+	<div id='previous_rolls'>
+		<% if $casino.game.roll %>
+			<h2>Last Roll: <%= $casino.game.roll %>
+		<% end %>
+		<% if $casino.game.game_point %>
+			| Point: <%= $casino.game.game_point %> </h2>
+		<% end %>
+	</div>
 
 </section>
 
-<section id='results'>
-	<h2>Dealer Message</h2>
-	<h4> <%= $casino.game.message %> </h4>
+<section id='dealer'>
+	<h3> Dealer: "<%= $casino.game.message %>" </h3>
 
-</section>
+</section id=''>
 
 <section id='pass'>
-
-	<div id='status_pass_bet'>
 	<% if $casino.game.pass && $casino.game.pass_bet %>
-		<h2> Bet type: <%= $casino.game.pass %> </h2>
-		<h2> Bet amount: <%= $casino.game.pass_bet %> </h2>
+		<div id='status_pass_bet'>
+			<h2> Bet type: <%= $casino.game.pass %>
+			<h2> Bet amount: $<%= $casino.game.pass_bet %> </h2>
+		</div>
 	<% else %>
 		<div id='place_pass_bet'>
 			<form method="POST" action="/set_pass">
@@ -41,7 +45,7 @@
 			</form>
 		</div>
 	<% end %>
-	</div>
+	
 </section>
 
 <section id='Odds Bet'>

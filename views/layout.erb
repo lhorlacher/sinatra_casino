@@ -5,6 +5,13 @@
 	<link rel="stylesheet" type="text/css" href="/stylesheets/styles.css">
 </head>
 <body>
- <%= yield %>
+ 	<%= yield %>
+
+ 	<footer>
+ 		<% if $casino.player %>
+ 			<h4>Player: <%= $casino.player.name %> |
+ 			Bankroll: <%= $casino.player.bankroll %> </h4>
+ 		<% end %>
+ 	</footer>
 </body>
 </html>
