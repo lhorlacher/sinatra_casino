@@ -22,7 +22,7 @@ PLATFORMS
 
 DEPENDENCIES
   pry
-  sinatra
+  sinatra (~> 1.4, >= 1.4.7)
 
 RUBY VERSION
    ruby 2.3.1p112

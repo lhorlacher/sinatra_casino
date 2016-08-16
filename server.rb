@@ -1,8 +1,9 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'sinatra'
 require 'pry'
-require 'lib/casino.rb'
-require 'lib/slots'
+require 'lib/casino'
+require_relative 'lib/slots'
+require_relative 'lib/craps'
 
 $casino = Casino.new
 
@@ -29,7 +30,7 @@ get '/slots' do
     erb :slots
 end
 
-gets '/craps' do
+get '/craps' do
     @game = Craps.new(@player)
     Craps.start
     erb :craps
